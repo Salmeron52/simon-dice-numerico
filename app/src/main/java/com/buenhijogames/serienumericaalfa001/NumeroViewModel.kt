@@ -13,12 +13,7 @@ class NumeroViewModel: ViewModel() {
     var numbers by  mutableStateOf(listOf<Int>(numeroAleatorio()))
     var shouldRecompose by  mutableStateOf(false)
     val textCajaNegra by mutableStateOf("")
-    var mostrarError by mutableStateOf(false)
-
-    fun addNumero() {
-        //Añadimos un numero generado por numeroAleatorio() a listaNumeros
-        listaNumeros + numeroAleatorio()
-    }
+    var mostrarError by mutableStateOf(true)
 
     fun numeroAleatorio(): Int {
         return (0..3).random() // 0, 1, 2, 3

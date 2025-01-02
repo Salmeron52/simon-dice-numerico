@@ -46,7 +46,7 @@ fun Pantalla5(modifier: Modifier = Modifier, viewModel: NumeroViewModel) {
         Log.e("numbers PRIMERA MEDIDA", numbers.toString())
         Log.e("listaNumeros PRIMERA MEDIDA", listaNumeros.toString())
 
-
+        if (numbers.size == 1) viewModel.mostrarError = false
         ControlCaja(numbers, viewModel)
 
         Spacer(modifier = Modifier.height(24.dp))
@@ -71,7 +71,9 @@ fun Pantalla5(modifier: Modifier = Modifier, viewModel: NumeroViewModel) {
                         //Se limpia la lista de números
                         listaNumeros = emptyList()
                         viewModel.shouldRecompose = !viewModel.shouldRecompose
+                        viewModel.mostrarError = false
                     }
+                    secuenciaIncorrecta(listaNumeros, numbers, viewModel)
                 }
             )
             Boton(
@@ -93,7 +95,9 @@ fun Pantalla5(modifier: Modifier = Modifier, viewModel: NumeroViewModel) {
                         //Se limpia la lista de números
                         listaNumeros = emptyList()
                         viewModel.shouldRecompose = !viewModel.shouldRecompose
+                        viewModel.mostrarError = false
                     }
+                    secuenciaIncorrecta(listaNumeros, numbers, viewModel)
                 }
             )
             Boton(
@@ -115,7 +119,9 @@ fun Pantalla5(modifier: Modifier = Modifier, viewModel: NumeroViewModel) {
                         //Se limpia la lista de números
                         listaNumeros = emptyList()
                         viewModel.shouldRecompose = !viewModel.shouldRecompose
+                        viewModel.mostrarError = false
                     }
+                    secuenciaIncorrecta(listaNumeros, numbers, viewModel)
                 }
             )
             Boton(
@@ -137,7 +143,9 @@ fun Pantalla5(modifier: Modifier = Modifier, viewModel: NumeroViewModel) {
                         //Se limpia la lista de números
                         listaNumeros = emptyList()
                         viewModel.shouldRecompose = !viewModel.shouldRecompose
+                        viewModel.mostrarError = false
                     }
+                    secuenciaIncorrecta(listaNumeros, numbers, viewModel)
                 }
             )
         }
@@ -151,18 +159,46 @@ fun Pantalla5(modifier: Modifier = Modifier, viewModel: NumeroViewModel) {
 
 }
 
+private fun comprobarPrimerElemento(
+    listaNumeros: List<Int>,
+    numbers: List<Int>,
+    viewModel: NumeroViewModel
+) {
+    if (listaNumeros[0] != numbers[0]) {
+        viewModel.mostrarError = true
+    }
+}
+
+
+private fun secuenciaIncorrecta(
+    listaNumeros: List<Int>,
+    numbers: List<Int>,
+    viewModel: NumeroViewModel
+) {
+    val minSize = minOf(listaNumeros.size, numbers.size)
+    for (i in 0 until minSize) {
+        if (listaNumeros[i] != numbers[i]) {
+            viewModel.mostrarError = true
+        }
+    }
+}
+
 @Composable
 private fun ControlCaja(
     numbers: List<Int>,
     viewModel: NumeroViewModel
 ) {
-    if (numbers.size == 1) {
-        NumberScroller(numbers = numbers, viewModel = viewModel)
+    if (viewModel.mostrarError) {
+        Text("Error", color = Color.Red)
     } else {
-        if (viewModel.shouldRecompose) {
+        if (numbers.size == 1) {
             NumberScroller(numbers = numbers, viewModel = viewModel)
         } else {
-            CajaNegra(viewModel = viewModel)
+            if (viewModel.shouldRecompose) {
+                NumberScroller(numbers = numbers, viewModel = viewModel)
+            } else {
+                CajaNegra(viewModel = viewModel)
+            }
         }
     }
 }
@@ -210,11 +246,11 @@ fun NumberScroller(numbers: List<Int>, viewModel: NumeroViewModel) {
     LaunchedEffect(key1 = Unit) {
         var cont = 0
         while (cont < numbers.size) {
+            delay(500)
             currentIndex.intValue = (currentIndex.intValue + 1) % numbers.size
             showNumber = true
             delay(700)
             showNumber = false
-            delay(500)
             cont++
         }
     }
