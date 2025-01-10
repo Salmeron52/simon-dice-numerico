@@ -46,7 +46,7 @@ fun Pantalla5(modifier: Modifier = Modifier, viewModel: NumeroViewModel) {
         Log.e("numbers PRIMERA MEDIDA", numbers.toString())
         Log.e("listaNumeros PRIMERA MEDIDA", listaNumeros.toString())
 
-        if (numbers.size == 1) viewModel.mostrarError = false
+        /*if (numbers.size == 1) viewModel.mostrarError = false*/
         ControlCaja(numbers, viewModel)
 
         Spacer(modifier = Modifier.height(24.dp))
@@ -153,7 +153,7 @@ fun Pantalla5(modifier: Modifier = Modifier, viewModel: NumeroViewModel) {
         Text(text = "Lista de números: $listaNumeros", modifier = Modifier.weight(1f))
 
         Button(
-            onClick = {}, modifier = Modifier.padding(bottom = 32.dp)
+            onClick = {  }, modifier = Modifier.padding(bottom = 32.dp)
         ) { Text("Lanzar") }
     }
 
