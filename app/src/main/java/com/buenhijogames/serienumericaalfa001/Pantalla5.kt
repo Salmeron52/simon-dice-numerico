@@ -33,8 +33,6 @@ import kotlinx.coroutines.delay
 
 @Composable
 fun Pantalla5(modifier: Modifier = Modifier, viewModel: NumeroViewModel) {
-    /*var numbers by remember { mutableStateOf(listOf<Int>(viewModel.numeroAleatorio())) }*/
-    /*var listaNumeros by remember { mutableStateOf(listOf<Int>()) }*/
 
     Column(
         modifier = Modifier
