@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -32,8 +33,8 @@ import kotlinx.coroutines.delay
 
 @Composable
 fun Pantalla5(modifier: Modifier = Modifier, viewModel: NumeroViewModel) {
-    var numbers by remember { mutableStateOf(listOf<Int>(viewModel.numeroAleatorio())) }
-    var listaNumeros by remember { mutableStateOf(listOf<Int>()) }
+    /*var numbers by remember { mutableStateOf(listOf<Int>(viewModel.numeroAleatorio())) }*/
+    /*var listaNumeros by remember { mutableStateOf(listOf<Int>()) }*/
 
     Column(
         modifier = Modifier
@@ -42,127 +43,137 @@ fun Pantalla5(modifier: Modifier = Modifier, viewModel: NumeroViewModel) {
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(text = "numbers: $numbers", modifier = Modifier.weight(1f))
-        Log.e("numbers PRIMERA MEDIDA", numbers.toString())
-        Log.e("listaNumeros PRIMERA MEDIDA", listaNumeros.toString())
+        if (viewModel.jugar) {
+            Text(text = "numbers: ${viewModel.numbers}", modifier = Modifier.weight(1f))
+            Log.e("numbers PRIMERA MEDIDA", viewModel.numbers.toString())
+            Log.e("listaNumeros PRIMERA MEDIDA", viewModel.listaNumeros.toString())
 
-        /*if (numbers.size == 1) viewModel.mostrarError = false*/
-        ControlCaja(numbers, viewModel)
+            ControlCaja(viewModel.numbers, viewModel)
 
-        Spacer(modifier = Modifier.height(24.dp))
+            Spacer(modifier = Modifier.height(24.dp))
 
-        Row(modifier = Modifier.weight(.5f)) {
-            Boton(
-                numero = 0,
-                color = Color.Yellow,
-                listaDeEnteros = listaNumeros,
-                listaNumeros = numbers,
-                onUpdated = { listaNumeros = it },
-                onClicked = {
-                    viewModel.shouldRecompose = false
-                    //Si las lista no coinciden se lanza un mensaje de error
-                    if (listaNumeros != numbers) {
-                        Log.e("Error", "Las listas no coinciden")
-                        Log.e("listaNumeros", listaNumeros.toString())
-                        Log.e("numbers", numbers.toString())
-                    } else {
-                        //Si las listas coinciden, se añade un número aleatorio a numbers
-                        numbers = numbers + viewModel.numeroAleatorio()
-                        //Se limpia la lista de números
-                        listaNumeros = emptyList()
-                        viewModel.shouldRecompose = !viewModel.shouldRecompose
-                        viewModel.mostrarError = false
+            Row(modifier = Modifier.weight(.5f)) {
+                Boton(
+                    numero = 0,
+                    color = Color.Yellow,
+                    listaDeEnteros = viewModel.listaNumeros,
+                    listaNumeros = viewModel.numbers,
+                    onUpdated = { viewModel.listaNumeros = it },
+                    onClicked = {
+                        viewModel.shouldRecompose = false
+                        //Si las lista no coinciden se lanza un mensaje de error
+                        if (viewModel.listaNumeros != viewModel.numbers) {
+                            Log.e("Error", "Las listas no coinciden")
+                            Log.e("listaNumeros", viewModel.listaNumeros.toString())
+                            Log.e("numbers", viewModel.numbers.toString())
+                        } else {
+                            //Si las listas coinciden, se añade un número aleatorio a numbers
+                            viewModel.numbers += viewModel.numeroAleatorio()
+                            //Se limpia la lista de números
+                            viewModel.listaNumeros = emptyList()
+                            viewModel.shouldRecompose = !viewModel.shouldRecompose
+                            viewModel.mostrarError = false
+                        }
+                        secuenciaIncorrecta(viewModel.listaNumeros, viewModel.numbers, viewModel)
                     }
-                    secuenciaIncorrecta(listaNumeros, numbers, viewModel)
-                }
-            )
-            Boton(
-                numero = 1,
-                color = Color.Green,
-                listaDeEnteros = listaNumeros,
-                listaNumeros = numbers,
-                onUpdated = { listaNumeros = it },
-                onClicked = {
-                    viewModel.shouldRecompose = false
-                    //Si las lista no coinciden se lanza un mensaje de error
-                    if (listaNumeros != numbers) {
-                        Log.e("Error", "Las listas no coinciden")
-                        Log.e("listaNumeros", listaNumeros.toString())
-                        Log.e("numbers", numbers.toString())
-                    } else {
-                        //Si las listas coinciden, se añade un número aleatorio a numbers
-                        numbers = numbers + viewModel.numeroAleatorio()
-                        //Se limpia la lista de números
-                        listaNumeros = emptyList()
-                        viewModel.shouldRecompose = !viewModel.shouldRecompose
-                        viewModel.mostrarError = false
+                )
+                Boton(
+                    numero = 1,
+                    color = Color.Green,
+                    listaDeEnteros = viewModel.listaNumeros,
+                    listaNumeros = viewModel.numbers,
+                    onUpdated = { viewModel.listaNumeros = it },
+                    onClicked = {
+                        viewModel.shouldRecompose = false
+                        //Si las lista no coinciden se lanza un mensaje de error
+                        if (viewModel.listaNumeros != viewModel.numbers) {
+                            Log.e("Error", "Las listas no coinciden")
+                            Log.e("listaNumeros", viewModel.listaNumeros.toString())
+                            Log.e("numbers", viewModel.numbers.toString())
+                        } else {
+                            //Si las listas coinciden, se añade un número aleatorio a numbers
+                            viewModel.numbers += viewModel.numeroAleatorio()
+                            //Se limpia la lista de números
+                            viewModel.listaNumeros = emptyList()
+                            viewModel.shouldRecompose = !viewModel.shouldRecompose
+                            viewModel.mostrarError = false
+                        }
+                        secuenciaIncorrecta(viewModel.listaNumeros, viewModel.numbers, viewModel)
                     }
-                    secuenciaIncorrecta(listaNumeros, numbers, viewModel)
-                }
-            )
-            Boton(
-                numero = 2,
-                color = Color.Red,
-                listaDeEnteros = listaNumeros,
-                listaNumeros = numbers,
-                onUpdated = { listaNumeros = it },
-                onClicked = {
-                    viewModel.shouldRecompose = false
-                    //Si las lista no coinciden se lanza un mensaje de error
-                    if (listaNumeros != numbers) {
-                        Log.e("Error", "Las listas no coinciden")
-                        Log.e("listaNumeros", listaNumeros.toString())
-                        Log.e("numbers", numbers.toString())
-                    } else {
-                        //Si las listas coinciden, se añade un número aleatorio a numbers
-                        numbers = numbers + viewModel.numeroAleatorio()
-                        //Se limpia la lista de números
-                        listaNumeros = emptyList()
-                        viewModel.shouldRecompose = !viewModel.shouldRecompose
-                        viewModel.mostrarError = false
+                )
+                Boton(
+                    numero = 2,
+                    color = Color.Red,
+                    listaDeEnteros = viewModel.listaNumeros,
+                    listaNumeros = viewModel.numbers,
+                    onUpdated = { viewModel.listaNumeros = it },
+                    onClicked = {
+                        viewModel.shouldRecompose = false
+                        //Si las lista no coinciden se lanza un mensaje de error
+                        if (viewModel.listaNumeros != viewModel.numbers) {
+                            Log.e("Error", "Las listas no coinciden")
+                            Log.e("listaNumeros", viewModel.listaNumeros.toString())
+                            Log.e("numbers", viewModel.numbers.toString())
+                        } else {
+                            //Si las listas coinciden, se añade un número aleatorio a numbers
+                            viewModel.numbers = viewModel.numbers + viewModel.numeroAleatorio()
+                            //Se limpia la lista de números
+                            viewModel.listaNumeros = emptyList()
+                            viewModel.shouldRecompose = !viewModel.shouldRecompose
+                            viewModel.mostrarError = false
+                        }
+                        secuenciaIncorrecta(viewModel.listaNumeros, viewModel.numbers, viewModel)
                     }
-                    secuenciaIncorrecta(listaNumeros, numbers, viewModel)
-                }
-            )
-            Boton(
-                numero = 3,
-                color = Color.Blue,
-                listaDeEnteros = listaNumeros,
-                listaNumeros = numbers,
-                onUpdated = { listaNumeros = it },
-                onClicked = {
-                    viewModel.shouldRecompose = false
-                    //Si las lista no coinciden se lanza un mensaje de error
-                    if (listaNumeros != numbers) {
-                        Log.e("Error", "Las listas no coinciden")
-                        Log.e("listaNumeros", listaNumeros.toString())
-                        Log.e("numbers", numbers.toString())
-                    } else {
-                        //Si las listas coinciden, se añade un número aleatorio a numbers
-                        numbers = numbers + viewModel.numeroAleatorio()
-                        //Se limpia la lista de números
-                        listaNumeros = emptyList()
-                        viewModel.shouldRecompose = !viewModel.shouldRecompose
-                        viewModel.mostrarError = false
+                )
+                Boton(
+                    numero = 3,
+                    color = Color.Blue,
+                    listaDeEnteros = viewModel.listaNumeros,
+                    listaNumeros = viewModel.numbers,
+                    onUpdated = { viewModel.listaNumeros = it },
+                    onClicked = {
+                        viewModel.shouldRecompose = false
+                        //Si las lista no coinciden se lanza un mensaje de error
+                        if (viewModel.listaNumeros != viewModel.numbers) {
+                            Log.e("Error", "Las listas no coinciden")
+                            Log.e("listaNumeros", viewModel.listaNumeros.toString())
+                            Log.e("numbers", viewModel.numbers.toString())
+                        } else {
+                            //Si las listas coinciden, se añade un número aleatorio a numbers
+                            viewModel.numbers += viewModel.numeroAleatorio()
+                            //Se limpia la lista de números
+                            viewModel.listaNumeros = emptyList()
+                            viewModel.shouldRecompose = !viewModel.shouldRecompose
+                            viewModel.mostrarError = false
+                        }
+                        secuenciaIncorrecta(viewModel.listaNumeros, viewModel.numbers, viewModel)
                     }
-                    secuenciaIncorrecta(listaNumeros, numbers, viewModel)
-                }
-            )
+                )
+            }
+
+            Text(text = "Lista de números: ${viewModel.listaNumeros}", modifier = Modifier.weight(1f))
+
+            /*Button(
+                onClick = { viewModel.inicializar(viewModel); viewModel.jugar = true },
+                modifier = Modifier.padding(bottom = 32.dp)
+            ) { Text("Lanzar") }*/
+        } else {
+            Button(
+                onClick = { viewModel.inicializar(viewModel); viewModel.mostrarError =false; viewModel.jugar = true },
+                modifier = Modifier.padding(bottom = 32.dp)
+            ) { Text("Jugar otra vez") }
         }
-
-        Text(text = "Lista de números: $listaNumeros", modifier = Modifier.weight(1f))
-
-        Button(
-            onClick = {  }, modifier = Modifier.padding(bottom = 32.dp)
-        ) { Text("Lanzar") }
     }
 
+
 }
+
+
 
 private fun comprobarPrimerElemento(
     listaNumeros: List<Int>,
     numbers: List<Int>,
-    viewModel: NumeroViewModel
+    viewModel: NumeroViewModel,
 ) {
     if (listaNumeros[0] != numbers[0]) {
         viewModel.mostrarError = true
@@ -173,20 +184,22 @@ private fun comprobarPrimerElemento(
 private fun secuenciaIncorrecta(
     listaNumeros: List<Int>,
     numbers: List<Int>,
-    viewModel: NumeroViewModel
+    viewModel: NumeroViewModel,
 ) {
     val minSize = minOf(listaNumeros.size, numbers.size)
     for (i in 0 until minSize) {
         if (listaNumeros[i] != numbers[i]) {
             viewModel.mostrarError = true
+            viewModel.jugar = false
         }
     }
 }
 
+
 @Composable
 private fun ControlCaja(
     numbers: List<Int>,
-    viewModel: NumeroViewModel
+    viewModel: NumeroViewModel,
 ) {
     if (viewModel.mostrarError) {
         Text("Error", color = Color.Red)
@@ -197,7 +210,8 @@ private fun ControlCaja(
             if (viewModel.shouldRecompose) {
                 NumberScroller(numbers = numbers, viewModel = viewModel)
             } else {
-                CajaNegra(viewModel = viewModel)
+                /*CajaNegra(viewModel = viewModel)*/
+                Caja(viewModel = viewModel, color = Color.White)
             }
         }
     }
@@ -217,6 +231,17 @@ fun CajaNegra(viewModel: NumeroViewModel) {
     }
 }
 
+@Composable
+fun Caja(viewModel: NumeroViewModel, color: Color) {
+    Box(
+        modifier = Modifier
+            .clip(RoundedCornerShape(24.dp))
+            .padding(horizontal = 4.dp)
+            .size(120.dp)
+            .background(color),
+    ) {}
+}
+
 
 @Composable
 private fun Boton(
@@ -225,7 +250,7 @@ private fun Boton(
     listaDeEnteros: List<Int>,
     listaNumeros: List<Int>,
     onUpdated: (List<Int>) -> Unit,
-    onClicked: (List<Int>) -> Unit
+    onClicked: (List<Int>) -> Unit,
 ) {
     Box(
         modifier = Modifier
@@ -260,15 +285,24 @@ fun NumberScroller(numbers: List<Int>, viewModel: NumeroViewModel) {
             .clip(RoundedCornerShape(24.dp))
             .padding(horizontal = 4.dp)
             .size(120.dp)
-            .background(Color.Black),
+            .background(Color.White),
         contentAlignment = Alignment.Center
     ) {
         if (currentIndex.intValue >= -2 && showNumber) {
-            Text(
+            if (numbers[currentIndex.intValue] == 0) {
+                Caja(viewModel = viewModel, color = Color.Yellow)
+            } else if (numbers[currentIndex.intValue] == 1) {
+                Caja(viewModel = viewModel, color = Color.Green)
+            } else if (numbers[currentIndex.intValue] == 2) {
+                Caja(viewModel = viewModel, color = Color.Red)
+            } else if (numbers[currentIndex.intValue] == 3) {
+                Caja(viewModel = viewModel, color = Color.Blue)
+            }
+            /*Text(
                 text = numbers[currentIndex.intValue].toString(),
                 fontSize = 64.sp,
                 color = Color.White
-            )
+            )*/
         }
     }
 }
