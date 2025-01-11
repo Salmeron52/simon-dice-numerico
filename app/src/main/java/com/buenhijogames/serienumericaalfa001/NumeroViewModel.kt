@@ -7,6 +7,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class NumeroViewModel: ViewModel() {
 
@@ -29,4 +32,6 @@ class NumeroViewModel: ViewModel() {
         listaNumeros = emptyList<Int>()
     }
 }
+
+
 
