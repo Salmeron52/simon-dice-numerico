@@ -133,10 +133,10 @@ fun NumberScroller(numbers: List<Int>, viewModel: NumeroViewModel) {
     LaunchedEffect(key1 = Unit) {
         var cont = 0
         while (cont < numbers.size) {
-            delay(500)
+            delay(400)
             currentIndex.intValue = (currentIndex.intValue + 1) % numbers.size
             showNumber = true
-            delay(700)
+            delay(600)
             showNumber = false
             cont++
         }

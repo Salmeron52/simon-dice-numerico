@@ -1,21 +1,15 @@
 package com.buenhijogames.serienumericaalfa001
 
-import androidx.collection.mutableIntListOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
-class NumeroViewModel: ViewModel() {
+class NumeroViewModel : ViewModel() {
 
     var listaNumeros by mutableStateOf(listOf<Int>())
-    var numbers by  mutableStateOf(listOf<Int>(numeroAleatorio()))
-    var shouldRecompose by  mutableStateOf(false)
+    var numbers by mutableStateOf(listOf<Int>(numeroAleatorio()))
+    var shouldRecompose by mutableStateOf(false)
     val textCajaNegra by mutableStateOf("")
     var mostrarError by mutableStateOf(false)
     var jugar by mutableStateOf(true)
