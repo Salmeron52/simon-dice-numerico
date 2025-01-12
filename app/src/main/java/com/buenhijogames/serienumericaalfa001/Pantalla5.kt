@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -25,9 +26,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.buenhijogames.serienumericaalfa001.componentes.BotonUsuario
 import com.buenhijogames.serienumericaalfa001.componentes.Caja
 import com.buenhijogames.serienumericaalfa001.componentes.ControlCaja
+import com.buenhijogames.serienumericaalfa001.componentes.MostrarError
+import com.buenhijogames.serienumericaalfa001.componentes.MostrarErrorParpadeante
 import kotlinx.coroutines.delay
 
 @Composable
@@ -36,13 +40,17 @@ fun Pantalla5(modifier: Modifier = Modifier, viewModel: NumeroViewModel) {
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .background(Color.Black)
             .padding(32.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
         if (viewModel.jugar) {
-            Text(text = "numbers: ${viewModel.numbers}")
+            /*Text(text = "numbers: ${viewModel.numbers}")*/
+            Text(text = "buenhijoGames", color = Color.White, fontSize = 24.sp)
+
+            Spacer(modifier = Modifier.height(64.dp))
 
             ControlCaja(viewModel.numbers, viewModel)
 
@@ -57,18 +65,24 @@ fun Pantalla5(modifier: Modifier = Modifier, viewModel: NumeroViewModel) {
                 BotonUsuario(viewModel, 2, Color.Red)
                 BotonUsuario(viewModel, 3, Color.Blue) }
 
-            Text(
-                text = "Lista de números: ${viewModel.listaNumeros}"
-            )
+            /*Text(text = "Lista de números: ${viewModel.listaNumeros}")*/
         } else {
-            Button(
-                onClick = {
-                    viewModel.inicializar(viewModel)
-                    viewModel.mostrarError = false
-                    viewModel.jugar = true
-                },
-                modifier = Modifier.padding(bottom = 32.dp)
-            ) { Text("Jugar otra vez") }
+            Column(
+                modifier = Modifier.fillMaxSize(),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                MostrarErrorParpadeante(viewModel, modifier = Modifier.weight(1f))
+                Spacer(modifier = Modifier.height(24.dp))
+                OutlinedButton(
+                    onClick = {
+                        viewModel.inicializar(viewModel)
+                        viewModel.mostrarError = false
+                        viewModel.jugar = true
+                    },
+                    modifier = Modifier.padding(bottom = 32.dp)
+                ) { Text("Jugar otra vez", color = Color.Yellow, fontSize = 24.sp) }
+            }
         }
     }
 

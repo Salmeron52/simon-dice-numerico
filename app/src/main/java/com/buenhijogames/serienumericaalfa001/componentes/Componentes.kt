@@ -113,15 +113,29 @@ fun ControlCaja(
                 NumberScroller(numbers = numbers, viewModel = viewModel)
             } else {
                 /*CajaNegra(viewModel = viewModel)*/
-                Caja(viewModel = viewModel, color = Color.White)
+                Caja(viewModel = viewModel, color = Color.Black)
             }
         }
     }
 }
 
 @Composable
+fun MostrarErrorParpadeante(viewModel: NumeroViewModel, modifier: Modifier = Modifier) {
+
+    var showError by remember { mutableStateOf(true) }
+
+    LaunchedEffect(key1 = Unit) {
+        while (true) {
+            delay(600)
+            showError = !showError
+        }
+    }
+    if(showError) MostrarError() else Text("Hola", fontSize = 60.sp)
+}
+
+@Composable
 fun MostrarError() {
-    Text("¡Error!", color = Color.Red, fontSize = 40.sp)
+    Text("¡Error!", color = Color.Red, fontSize = 60.sp)
 }
 
 
@@ -147,7 +161,7 @@ fun NumberScroller(numbers: List<Int>, viewModel: NumeroViewModel) {
             .clip(RoundedCornerShape(24.dp))
             .padding(horizontal = 4.dp)
             .size(120.dp)
-            .background(Color.White),
+            .background(Color.Black),
         contentAlignment = Alignment.Center
     ) {
         if (currentIndex.intValue >= -2 && showNumber) {
