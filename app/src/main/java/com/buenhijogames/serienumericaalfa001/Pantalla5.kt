@@ -42,22 +42,23 @@ fun Pantalla5(modifier: Modifier = Modifier, viewModel: NumeroViewModel) {
     ) {
 
         if (viewModel.jugar) {
-            Text(text = "numbers: ${viewModel.numbers}", modifier = Modifier.weight(1f))
+            Text(text = "numbers: ${viewModel.numbers}")
 
             ControlCaja(viewModel.numbers, viewModel)
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            Row(modifier = Modifier.weight(.5f)) {
+            Row {
                 BotonUsuario(viewModel, 0, Color.Yellow)
                 BotonUsuario(viewModel, 1, Color.Green)
-                BotonUsuario(viewModel, 2, Color.Red)
-                BotonUsuario(viewModel, 3, Color.Blue)
             }
+            Spacer(modifier = Modifier.height(12.dp))
+            Row {
+                BotonUsuario(viewModel, 2, Color.Red)
+                BotonUsuario(viewModel, 3, Color.Blue) }
 
             Text(
-                text = "Lista de números: ${viewModel.listaNumeros}",
-                modifier = Modifier.weight(1f)
+                text = "Lista de números: ${viewModel.listaNumeros}"
             )
         } else {
             Button(

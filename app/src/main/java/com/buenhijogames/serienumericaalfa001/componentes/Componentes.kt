@@ -65,7 +65,7 @@ fun Boton(
         modifier = Modifier
             .clip(RoundedCornerShape(24.dp))
             .padding(horizontal = 4.dp)
-            .size(60.dp)
+            .size(160.dp)
             .background(color)
             .clickable { onUpdated(listaDeEnteros + numero); onClicked(listaNumeros) },
         contentAlignment = Alignment.Center
