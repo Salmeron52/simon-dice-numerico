@@ -3,7 +3,10 @@ package com.buenhijogames.serienumericaalfa001.componentes
 import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -19,6 +22,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.buenhijogames.serienumericaalfa001.NumeroViewModel
@@ -42,6 +46,7 @@ fun BotonUsuario(viewModel: NumeroViewModel, numero: Int, color: Color) {
             } else {
                 //Si las listas coinciden, se añade un número aleatorio a numbers
                 viewModel.numbers += viewModel.numeroAleatorio()
+                viewModel.puntos += 10
                 //Se limpia la lista de números
                 viewModel.listaNumeros = emptyList()
                 viewModel.shouldRecompose = !viewModel.shouldRecompose
@@ -112,7 +117,6 @@ fun ControlCaja(
             if (viewModel.shouldRecompose) {
                 NumberScroller(numbers = numbers, viewModel = viewModel)
             } else {
-                /*CajaNegra(viewModel = viewModel)*/
                 Caja(viewModel = viewModel, color = Color.Black)
             }
         }
@@ -150,7 +154,7 @@ fun NumberScroller(numbers: List<Int>, viewModel: NumeroViewModel) {
             delay(400)
             currentIndex.intValue = (currentIndex.intValue + 1) % numbers.size
             showNumber = true
-            delay(600)
+            delay(400)
             showNumber = false
             cont++
         }
@@ -175,5 +179,21 @@ fun NumberScroller(numbers: List<Int>, viewModel: NumeroViewModel) {
                 Caja(viewModel = viewModel, color = Color.Blue)
             }
         }
+    }
+}
+
+@Composable
+fun MostrarMarcador(viewModel: NumeroViewModel) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.Absolute.SpaceBetween
+    ) {
+        Text("Score: ${viewModel.puntos}", color = Color.White, fontSize = 18.sp)
+        Text(
+            " Record: ${viewModel.record}",
+            color = Color.White,
+            fontSize = 18.sp,
+            textAlign = TextAlign.Right
+        )
     }
 }
