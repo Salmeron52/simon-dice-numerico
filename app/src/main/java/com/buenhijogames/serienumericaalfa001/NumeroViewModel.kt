@@ -1,12 +1,17 @@
 package com.buenhijogames.serienumericaalfa001
 
+import android.content.Context
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.buenhijogames.serienumericaalfa001.data.RecordDataStore
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 
-class NumeroViewModel : ViewModel() {
+class NumeroViewModel(private val context: Context) : ViewModel() {
 
     var listaNumeros by mutableStateOf(listOf<Int>())
     var numbers by mutableStateOf(listOf<Int>(numeroAleatorio()))
@@ -15,9 +20,22 @@ class NumeroViewModel : ViewModel() {
     var jugar by mutableStateOf(true)
     var puntos: Int by mutableIntStateOf(0)
     var record by mutableIntStateOf(0)
+    val recordDataStore = RecordDataStore(context)
 
-    fun calcularRecord() { if (record <= puntos)  record = puntos }
+    init {
+        viewModelScope.launch {
+            record = recordDataStore.getRecord.first() // Fetch initial record
+        }
+    }
 
+    fun calcularRecord() {
+        if (record < puntos) {
+            record = puntos
+            viewModelScope.launch {
+                recordDataStore.saveRecord(record) // Save record asynchronously
+            }
+        }
+    }
     fun numeroAleatorio(): Int {
         return (0..3).random() // 0, 1, 2, 3
     }

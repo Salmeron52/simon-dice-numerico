@@ -1,5 +1,6 @@
 package com.buenhijogames.serienumericaalfa001.componentes
 
+import android.content.Context
 import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -13,20 +14,25 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.buenhijogames.serienumericaalfa001.NumeroViewModel
+import com.buenhijogames.serienumericaalfa001.data.RecordDataStore
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @Composable
 fun BotonUsuario(viewModel: NumeroViewModel, numero: Int, color: Color) {
@@ -184,13 +190,20 @@ fun NumberScroller(numbers: List<Int>, viewModel: NumeroViewModel) {
 
 @Composable
 fun MostrarMarcador(viewModel: NumeroViewModel) {
+    val context: Context = LocalContext.current
+    val scope = rememberCoroutineScope()
+    val recordDataStore = RecordDataStore(context)
+
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.Absolute.SpaceBetween
     ) {
+        LaunchedEffect(key1 = viewModel.record) { scope.launch { recordDataStore.saveRecord(viewModel.record) } }
+        val userRecord = recordDataStore.getRecord.collectAsState(initial = 0)
+
         Text("Score: ${viewModel.puntos}", color = Color.White, fontSize = 18.sp)
         Text(
-            " Record: ${viewModel.record}",
+            " Record: ${userRecord.value}",
             color = Color.White,
             fontSize = 18.sp,
             textAlign = TextAlign.Right

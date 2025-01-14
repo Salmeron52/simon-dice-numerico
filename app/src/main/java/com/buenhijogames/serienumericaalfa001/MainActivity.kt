@@ -9,7 +9,7 @@ import com.buenhijogames.serienumericaalfa001.ui.theme.SerieNumericaAlfa001Theme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
-        val viewModel = NumeroViewModel()
+        val viewModel = NumeroViewModel(this)
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
