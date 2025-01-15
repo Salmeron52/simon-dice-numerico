@@ -1,40 +1,28 @@
 package com.buenhijogames.serienumericaalfa001
 
-import android.content.Context
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.buenhijogames.serienumericaalfa001.componentes.BotonUsuario
 import com.buenhijogames.serienumericaalfa001.componentes.ControlCaja
 import com.buenhijogames.serienumericaalfa001.componentes.MostrarErrorParpadeante
 import com.buenhijogames.serienumericaalfa001.componentes.MostrarMarcador
-import com.buenhijogames.serienumericaalfa001.data.RecordDataStore
-import kotlinx.coroutines.launch
 
 @Composable
 fun Pantalla5(modifier: Modifier = Modifier, viewModel: NumeroViewModel) {
-    /*val context: Context = LocalContext.current
-    val scope = rememberCoroutineScope()
-    val recordDataStore = RecordDataStore(context)*/
 
     viewModel.calcularRecord()
     Column(
@@ -46,18 +34,7 @@ fun Pantalla5(modifier: Modifier = Modifier, viewModel: NumeroViewModel) {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         if (viewModel.jugar) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.Absolute.SpaceBetween
-            ) {
-                Text("Score: ${viewModel.puntos}", color = Color.White, fontSize = 18.sp)
-                Text(
-                    " Record: ${viewModel.record}",
-                    color = Color.White,
-                    fontSize = 18.sp,
-                    textAlign = TextAlign.Right
-                )
-            }
+            MostrarMarcador(viewModel)
             Spacer(modifier = Modifier.height(12.dp))
             Text(text = "buenhijoGames", color = Color.White, fontSize = 24.sp)
             Spacer(modifier = Modifier.height(64.dp))

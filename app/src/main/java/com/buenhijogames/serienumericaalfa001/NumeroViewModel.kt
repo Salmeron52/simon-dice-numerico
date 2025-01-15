@@ -20,7 +20,7 @@ class NumeroViewModel(private val context: Context) : ViewModel() {
     var jugar by mutableStateOf(true)
     var puntos: Int by mutableIntStateOf(0)
     var record by mutableIntStateOf(0)
-    val recordDataStore = RecordDataStore(context)
+    private val recordDataStore = RecordDataStore(context)
 
     init {
         viewModelScope.launch {
@@ -32,7 +32,7 @@ class NumeroViewModel(private val context: Context) : ViewModel() {
         if (record < puntos) {
             record = puntos
             viewModelScope.launch {
-                recordDataStore.saveRecord(record) // Save record asynchronously
+                recordDataStore.saveRecord(record)
             }
         }
     }
