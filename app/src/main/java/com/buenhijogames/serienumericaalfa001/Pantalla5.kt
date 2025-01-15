@@ -36,6 +36,7 @@ fun Pantalla5(modifier: Modifier = Modifier, viewModel: NumeroViewModel) {
         if (viewModel.jugar) {
             MostrarMarcador(viewModel)
             Spacer(modifier = Modifier.height(12.dp))
+
             Text(text = "buenhijoGames", color = Color.White, fontSize = 24.sp)
             Spacer(modifier = Modifier.height(64.dp))
 
