@@ -24,7 +24,7 @@ class NumeroViewModel(private val context: Context) : ViewModel() {
 
     init {
         viewModelScope.launch {
-            record = recordDataStore.getRecord.first() // Fetch initial record
+            record = recordDataStore.getRecord.first() // Obtener registro inicial
         }
     }
 
