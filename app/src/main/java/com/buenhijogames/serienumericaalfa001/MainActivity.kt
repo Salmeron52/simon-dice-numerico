@@ -10,11 +10,12 @@ import com.buenhijogames.serienumericaalfa001.ui.theme.SerieNumericaAlfa001Theme
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         val viewModel = NumeroViewModel(this)
+        val context = this
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
             SerieNumericaAlfa001Theme {
-                Column { Pantalla5(viewModel = viewModel) }
+                Column { Pantalla5(viewModel = viewModel, context = this@MainActivity) }
             }
         }
     }

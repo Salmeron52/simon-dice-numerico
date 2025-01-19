@@ -1,5 +1,7 @@
 package com.buenhijogames.serienumericaalfa001
 
+import android.content.Context
+import android.media.MediaPlayer
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -14,6 +16,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.buenhijogames.serienumericaalfa001.componentes.BotonUsuario
@@ -22,8 +25,9 @@ import com.buenhijogames.serienumericaalfa001.componentes.MostrarErrorParpadeant
 import com.buenhijogames.serienumericaalfa001.componentes.MostrarMarcador
 
 @Composable
-fun Pantalla5(modifier: Modifier = Modifier, viewModel: NumeroViewModel) {
+fun Pantalla5(modifier: Modifier = Modifier, viewModel: NumeroViewModel, context: Context) {
 
+    val error: MediaPlayer = MediaPlayer.create(context, R.raw.error)
     viewModel.calcularRecord()
     Column(
         modifier = Modifier
@@ -44,13 +48,13 @@ fun Pantalla5(modifier: Modifier = Modifier, viewModel: NumeroViewModel) {
             Spacer(modifier = Modifier.height(24.dp))
 
             Row {
-                BotonUsuario(viewModel, 0, Color.Yellow)
-                BotonUsuario(viewModel, 1, Color.Green)
+                BotonUsuario(viewModel, 0, Color.Yellow, context = LocalContext.current)
+                BotonUsuario(viewModel, 1, Color.Green, context = LocalContext.current)
             }
             Spacer(modifier = Modifier.height(12.dp))
             Row {
-                BotonUsuario(viewModel, 2, Color.Red)
-                BotonUsuario(viewModel, 3, Color.Blue)
+                BotonUsuario(viewModel, 2, Color.Red,  context = LocalContext.current)
+                BotonUsuario(viewModel, 3, Color.Blue, context = LocalContext.current)
             }
 
         } else {
@@ -60,6 +64,7 @@ fun Pantalla5(modifier: Modifier = Modifier, viewModel: NumeroViewModel) {
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 MostrarErrorParpadeante(viewModel, modifier = Modifier.weight(1f))
+                error.start()
                 Spacer(modifier = Modifier.height(24.dp))
                 OutlinedButton(
                     onClick = {

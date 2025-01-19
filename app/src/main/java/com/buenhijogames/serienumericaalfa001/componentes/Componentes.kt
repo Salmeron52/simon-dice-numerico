@@ -1,6 +1,7 @@
 package com.buenhijogames.serienumericaalfa001.componentes
 
 import android.content.Context
+import android.media.MediaPlayer
 import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -30,12 +31,22 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.buenhijogames.serienumericaalfa001.NumeroViewModel
+import com.buenhijogames.serienumericaalfa001.R
 import com.buenhijogames.serienumericaalfa001.data.RecordDataStore
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @Composable
-fun BotonUsuario(viewModel: NumeroViewModel, numero: Int, color: Color) {
+fun BotonUsuario(viewModel: NumeroViewModel, numero: Int, color: Color, context: Context) {
+
+    val sonidoAmarillo: MediaPlayer = MediaPlayer.create(context, R.raw.sonidoamarillo)
+    val sonidoVerde: MediaPlayer = MediaPlayer.create(context, R.raw.sonidoverde)
+    val sonidoRojo: MediaPlayer = MediaPlayer.create(context, R.raw.sonidorojo)
+    val sonidoAzul: MediaPlayer = MediaPlayer.create(context, R.raw.sonidoazul)
+    val error: MediaPlayer = MediaPlayer.create(context, R.raw.error)
+    /*val context = LocalContext.current
+    val vibrator = context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+    val milisegundos = 10L*/
     Boton(
         numero = numero,
         color = color,
@@ -43,12 +54,35 @@ fun BotonUsuario(viewModel: NumeroViewModel, numero: Int, color: Color) {
         listaNumeros = viewModel.numbers,
         onUpdated = { viewModel.listaNumeros = it },
         onClicked = {
+            when (numero) {
+                0 -> {
+                    sonidoAmarillo.start()
+                    sonidoAmarillo.setOnCompletionListener { sonidoAmarillo.release() }
+                }
+
+                1 -> {
+                    sonidoVerde.start()
+                    sonidoVerde.setOnCompletionListener { sonidoVerde.release() }
+                }
+
+                2 -> {
+                    sonidoRojo.start()
+                    sonidoRojo.setOnCompletionListener { sonidoRojo.release() }
+                }
+
+                3 -> {
+                    sonidoAzul.start()
+                    sonidoAzul.setOnCompletionListener { sonidoAzul.release() } // Liberar recursos
+                }
+            }
+            /*vibrator.vibrate(VibrationEffect.createOneShot(milisegundos, VibrationEffect.DEFAULT_AMPLITUDE))*/
             viewModel.shouldRecompose = false
             //Si las lista no coinciden se lanza un mensaje de error
             if (viewModel.listaNumeros != viewModel.numbers) {
                 Log.e("Error", "Las listas no coinciden")
                 Log.e("listaNumeros", viewModel.listaNumeros.toString())
                 Log.e("numbers", viewModel.numbers.toString())
+
             } else {
                 //Si las listas coinciden, se añade un número aleatorio a numbers
                 viewModel.numbers += viewModel.numeroAleatorio()
@@ -95,6 +129,7 @@ fun secuenciaIncorrecta(
             viewModel.jugar = false
         }
     }
+
 }
 
 @Composable
@@ -118,10 +153,14 @@ fun ControlCaja(
         MostrarError()
     } else {
         if (numbers.size == 1) {
-            NumberScroller(numbers = numbers, viewModel = viewModel)
+            NumberScroller(numbers = numbers, viewModel = viewModel, context = LocalContext.current)
         } else {
             if (viewModel.shouldRecompose) {
-                NumberScroller(numbers = numbers, viewModel = viewModel)
+                NumberScroller(
+                    numbers = numbers,
+                    viewModel = viewModel,
+                    context = LocalContext.current
+                )
             } else {
                 Caja(viewModel = viewModel, color = Color.Black)
             }
@@ -140,7 +179,7 @@ fun MostrarErrorParpadeante(viewModel: NumeroViewModel, modifier: Modifier = Mod
             showError = !showError
         }
     }
-    if(showError) MostrarError() else Text("Hola", fontSize = 60.sp)
+    if (showError) MostrarError() else Text("Hola", fontSize = 60.sp)
 }
 
 @Composable
@@ -150,17 +189,22 @@ fun MostrarError() {
 
 
 @Composable
-fun NumberScroller(numbers: List<Int>, viewModel: NumeroViewModel) {
+fun NumberScroller(numbers: List<Int>, viewModel: NumeroViewModel, context: Context) {
     val currentIndex = remember { mutableIntStateOf(-1) } // -1 para que no se muestre nada
     var showNumber by remember { mutableStateOf(false) }
+
+    val sonidoAmarillo: MediaPlayer = MediaPlayer.create(context, R.raw.sonidoamarillo)
+    val sonidoVerde: MediaPlayer = MediaPlayer.create(context, R.raw.sonidoverde)
+    val sonidoRojo: MediaPlayer = MediaPlayer.create(context, R.raw.sonidorojo)
+    val sonidoAzul: MediaPlayer = MediaPlayer.create(context, R.raw.sonidoazul)
 
     LaunchedEffect(key1 = Unit) {
         var cont = 0
         while (cont < numbers.size) {
-            delay(400)
+            delay(300)
             currentIndex.intValue = (currentIndex.intValue + 1) % numbers.size
             showNumber = true
-            delay(400)
+            delay(600)
             showNumber = false
             cont++
         }
@@ -177,12 +221,20 @@ fun NumberScroller(numbers: List<Int>, viewModel: NumeroViewModel) {
         if (currentIndex.intValue >= -2 && showNumber) {
             if (numbers[currentIndex.intValue] == 0) {
                 Caja(viewModel = viewModel, color = Color.Yellow)
+                sonidoAmarillo.start()
+                sonidoAmarillo.setOnCompletionListener { sonidoAmarillo.release() }
             } else if (numbers[currentIndex.intValue] == 1) {
                 Caja(viewModel = viewModel, color = Color.Green)
+                sonidoVerde.start()
+                sonidoVerde.setOnCompletionListener { sonidoVerde.release() }
             } else if (numbers[currentIndex.intValue] == 2) {
                 Caja(viewModel = viewModel, color = Color.Red)
+                sonidoRojo.start()
+                sonidoRojo.setOnCompletionListener { sonidoRojo.release() }
             } else if (numbers[currentIndex.intValue] == 3) {
                 Caja(viewModel = viewModel, color = Color.Blue)
+                sonidoAzul.start()
+                sonidoAzul.setOnCompletionListener { sonidoAzul.release() }
             }
         }
     }
@@ -198,7 +250,13 @@ fun MostrarMarcador(viewModel: NumeroViewModel) {
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.Absolute.SpaceBetween
     ) {
-        LaunchedEffect(key1 = viewModel.record) { scope.launch { recordDataStore.saveRecord(viewModel.record) } }
+        LaunchedEffect(key1 = viewModel.record) {
+            scope.launch {
+                recordDataStore.saveRecord(
+                    viewModel.record
+                )
+            }
+        }
         val userRecord = recordDataStore.getRecord.collectAsState(initial = 0)
 
         Text("Score: ${viewModel.puntos}", color = Color.White, fontSize = 18.sp)
