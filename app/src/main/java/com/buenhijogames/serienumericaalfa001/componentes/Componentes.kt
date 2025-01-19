@@ -2,6 +2,8 @@ package com.buenhijogames.serienumericaalfa001.componentes
 
 import android.content.Context
 import android.media.MediaPlayer
+import android.os.VibrationEffect
+import android.os.Vibrator
 import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -44,9 +46,9 @@ fun BotonUsuario(viewModel: NumeroViewModel, numero: Int, color: Color, context:
     val sonidoRojo: MediaPlayer = MediaPlayer.create(context, R.raw.sonidorojo)
     val sonidoAzul: MediaPlayer = MediaPlayer.create(context, R.raw.sonidoazul)
     val error: MediaPlayer = MediaPlayer.create(context, R.raw.error)
-    /*val context = LocalContext.current
+    val context = LocalContext.current
     val vibrator = context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
-    val milisegundos = 10L*/
+    val milisegundos = 10L
     Boton(
         numero = numero,
         color = color,
@@ -75,7 +77,7 @@ fun BotonUsuario(viewModel: NumeroViewModel, numero: Int, color: Color, context:
                     sonidoAzul.setOnCompletionListener { sonidoAzul.release() } // Liberar recursos
                 }
             }
-            /*vibrator.vibrate(VibrationEffect.createOneShot(milisegundos, VibrationEffect.DEFAULT_AMPLITUDE))*/
+            vibrator.vibrate(VibrationEffect.createOneShot(milisegundos, VibrationEffect.DEFAULT_AMPLITUDE))
             viewModel.shouldRecompose = false
             //Si las lista no coinciden se lanza un mensaje de error
             if (viewModel.listaNumeros != viewModel.numbers) {
