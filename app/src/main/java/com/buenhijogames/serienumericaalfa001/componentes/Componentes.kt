@@ -65,21 +65,13 @@ fun BotonUsuario(viewModel: NumeroViewModel, numero: Int, color: Color, context:
         onUpdated = { viewModel.listaNumeros = it },
         onClicked = {
             when (numero) {
-                0 -> {
-                    viewModel.sonar(context, exoPlayer, R.raw.sonidoamarillo)
-                }
+                0 -> { viewModel.sonar(context, exoPlayer, R.raw.sonidoamarillo) }
 
-                1 -> {
-                    viewModel.sonar(context, exoPlayer, R.raw.sonidoverde)
-                }
+                1 -> { viewModel.sonar(context, exoPlayer, R.raw.sonidoverde) }
 
-                2 -> {
-                    viewModel.sonar(context, exoPlayer, R.raw.sonidorojo)
-                }
+                2 -> {viewModel.sonar(context, exoPlayer, R.raw.sonidorojo) }
 
-                3 -> {
-                    viewModel.sonar(context, exoPlayer, R.raw.sonidoazul)
-                }
+                3 -> {viewModel.sonar(context, exoPlayer, R.raw.sonidoazul) }
             }
 
             vibrator.vibrate(
@@ -88,13 +80,13 @@ fun BotonUsuario(viewModel: NumeroViewModel, numero: Int, color: Color, context:
                     VibrationEffect.DEFAULT_AMPLITUDE
                 )
             )
+
             viewModel.shouldRecompose = false
             //Si las lista no coinciden se lanza un mensaje de error
             if (viewModel.listaNumeros != viewModel.numbers) {
                 Log.e("Error", "Las listas no coinciden")
                 Log.e("listaNumeros", viewModel.listaNumeros.toString())
                 Log.e("numbers", viewModel.numbers.toString())
-
             } else {
                 //Si las listas coinciden, se añade un número aleatorio a numbers
                 viewModel.numbers += viewModel.numeroAleatorio()
