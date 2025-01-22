@@ -13,12 +13,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.media3.exoplayer.ExoPlayer
 import com.buenhijogames.serienumericaalfa001.componentes.BotonUsuario
 import com.buenhijogames.serienumericaalfa001.componentes.ControlCaja
 import com.buenhijogames.serienumericaalfa001.componentes.MostrarErrorParpadeante
@@ -27,7 +29,10 @@ import com.buenhijogames.serienumericaalfa001.componentes.MostrarMarcador
 @Composable
 fun Pantalla5(modifier: Modifier = Modifier, viewModel: NumeroViewModel, context: Context) {
 
-    val error: MediaPlayer = MediaPlayer.create(context, R.raw.error)
+    val context = LocalContext.current
+    // Creamos un ExoPlayer y lo liberamos cuando el Composable se destruye
+    val exoPlayer = remember { ExoPlayer.Builder(context).build() }
+
     viewModel.calcularRecord()
     Column(
         modifier = Modifier
@@ -64,7 +69,7 @@ fun Pantalla5(modifier: Modifier = Modifier, viewModel: NumeroViewModel, context
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 MostrarErrorParpadeante(viewModel, modifier = Modifier.weight(1f))
-                error.start()
+                viewModel.sonar(context, exoPlayer, R.raw.error)
                 Spacer(modifier = Modifier.height(24.dp))
                 OutlinedButton(
                     onClick = {

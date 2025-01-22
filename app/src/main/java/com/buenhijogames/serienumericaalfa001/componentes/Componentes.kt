@@ -2,6 +2,7 @@ package com.buenhijogames.serienumericaalfa001.componentes
 
 import android.content.Context
 import android.media.MediaPlayer
+import android.net.Uri
 import android.os.VibrationEffect
 import android.os.Vibrator
 import android.util.Log
@@ -16,6 +17,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -32,6 +34,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.media3.common.MediaItem
+import androidx.media3.exoplayer.ExoPlayer
 import com.buenhijogames.serienumericaalfa001.NumeroViewModel
 import com.buenhijogames.serienumericaalfa001.R
 import com.buenhijogames.serienumericaalfa001.data.RecordDataStore
@@ -40,15 +44,19 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun BotonUsuario(viewModel: NumeroViewModel, numero: Int, color: Color, context: Context) {
-
-    val sonidoAmarillo: MediaPlayer = MediaPlayer.create(context, R.raw.sonidoamarillo)
-    val sonidoVerde: MediaPlayer = MediaPlayer.create(context, R.raw.sonidoverde)
-    val sonidoRojo: MediaPlayer = MediaPlayer.create(context, R.raw.sonidorojo)
-    val sonidoAzul: MediaPlayer = MediaPlayer.create(context, R.raw.sonidoazul)
-    val error: MediaPlayer = MediaPlayer.create(context, R.raw.error)
     val context = LocalContext.current
+    // Creamos un ExoPlayer y lo liberamos cuando el Composable se destruye
+    val exoPlayer = remember { ExoPlayer.Builder(context).build() }
+
     val vibrator = context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
     val milisegundos = 10L
+
+    DisposableEffect(exoPlayer) {
+        onDispose {
+            exoPlayer.release()
+        }
+    }
+
     Boton(
         numero = numero,
         color = color,
@@ -58,26 +66,28 @@ fun BotonUsuario(viewModel: NumeroViewModel, numero: Int, color: Color, context:
         onClicked = {
             when (numero) {
                 0 -> {
-                    sonidoAmarillo.start()
-                    sonidoAmarillo.setOnCompletionListener { sonidoAmarillo.release() }
+                    viewModel.sonar(context, exoPlayer, R.raw.sonidoamarillo)
                 }
 
                 1 -> {
-                    sonidoVerde.start()
-                    sonidoVerde.setOnCompletionListener { sonidoVerde.release() }
+                    viewModel.sonar(context, exoPlayer, R.raw.sonidoverde)
                 }
 
                 2 -> {
-                    sonidoRojo.start()
-                    sonidoRojo.setOnCompletionListener { sonidoRojo.release() }
+                    viewModel.sonar(context, exoPlayer, R.raw.sonidorojo)
                 }
 
                 3 -> {
-                    sonidoAzul.start()
-                    sonidoAzul.setOnCompletionListener { sonidoAzul.release() } // Liberar recursos
+                    viewModel.sonar(context, exoPlayer, R.raw.sonidoazul)
                 }
             }
-            vibrator.vibrate(VibrationEffect.createOneShot(milisegundos, VibrationEffect.DEFAULT_AMPLITUDE))
+
+            vibrator.vibrate(
+                VibrationEffect.createOneShot(
+                    milisegundos,
+                    VibrationEffect.DEFAULT_AMPLITUDE
+                )
+            )
             viewModel.shouldRecompose = false
             //Si las lista no coinciden se lanza un mensaje de error
             if (viewModel.listaNumeros != viewModel.numbers) {
@@ -99,6 +109,7 @@ fun BotonUsuario(viewModel: NumeroViewModel, numero: Int, color: Color, context:
     )
 }
 
+
 @Composable
 fun Boton(
     numero: Int,
@@ -116,7 +127,7 @@ fun Boton(
             .background(color)
             .clickable { onUpdated(listaDeEnteros + numero); onClicked(listaNumeros) },
         contentAlignment = Alignment.Center
-    ) { Text(numero.toString(), fontSize = 24.sp) }
+    ) {  }
 }
 
 fun secuenciaIncorrecta(
@@ -146,7 +157,6 @@ fun Caja(viewModel: NumeroViewModel, color: Color) {
 }
 
 @Composable
-
 fun ControlCaja(
     numbers: List<Int>,
     viewModel: NumeroViewModel,
@@ -195,10 +205,15 @@ fun NumberScroller(numbers: List<Int>, viewModel: NumeroViewModel, context: Cont
     val currentIndex = remember { mutableIntStateOf(-1) } // -1 para que no se muestre nada
     var showNumber by remember { mutableStateOf(false) }
 
-    val sonidoAmarillo: MediaPlayer = MediaPlayer.create(context, R.raw.sonidoamarillo)
-    val sonidoVerde: MediaPlayer = MediaPlayer.create(context, R.raw.sonidoverde)
-    val sonidoRojo: MediaPlayer = MediaPlayer.create(context, R.raw.sonidorojo)
-    val sonidoAzul: MediaPlayer = MediaPlayer.create(context, R.raw.sonidoazul)
+    val context = LocalContext.current
+    // Creamos un ExoPlayer y lo liberamos cuando el Composable se destruye
+    val exoPlayer = remember { ExoPlayer.Builder(context).build() }
+
+    DisposableEffect(exoPlayer) {
+        onDispose {
+            exoPlayer.release()
+        }
+    }
 
     LaunchedEffect(key1 = Unit) {
         var cont = 0
@@ -223,20 +238,16 @@ fun NumberScroller(numbers: List<Int>, viewModel: NumeroViewModel, context: Cont
         if (currentIndex.intValue >= -2 && showNumber) {
             if (numbers[currentIndex.intValue] == 0) {
                 Caja(viewModel = viewModel, color = Color.Yellow)
-                sonidoAmarillo.start()
-                sonidoAmarillo.setOnCompletionListener { sonidoAmarillo.release() }
+                viewModel.sonar(context, exoPlayer, R.raw.sonidoamarillo)
             } else if (numbers[currentIndex.intValue] == 1) {
                 Caja(viewModel = viewModel, color = Color.Green)
-                sonidoVerde.start()
-                sonidoVerde.setOnCompletionListener { sonidoVerde.release() }
+                viewModel.sonar(context, exoPlayer, R.raw.sonidoverde)
             } else if (numbers[currentIndex.intValue] == 2) {
                 Caja(viewModel = viewModel, color = Color.Red)
-                sonidoRojo.start()
-                sonidoRojo.setOnCompletionListener { sonidoRojo.release() }
+                viewModel.sonar(context, exoPlayer, R.raw.sonidorojo)
             } else if (numbers[currentIndex.intValue] == 3) {
                 Caja(viewModel = viewModel, color = Color.Blue)
-                sonidoAzul.start()
-                sonidoAzul.setOnCompletionListener { sonidoAzul.release() }
+                viewModel.sonar(context, exoPlayer, R.raw.sonidoazul)
             }
         }
     }

@@ -1,12 +1,16 @@
 package com.buenhijogames.serienumericaalfa001
 
 import android.content.Context
+import android.media.MediaPlayer
+import android.net.Uri
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.media3.common.MediaItem
+import androidx.media3.exoplayer.ExoPlayer
 import com.buenhijogames.serienumericaalfa001.data.RecordDataStore
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -26,6 +30,18 @@ class NumeroViewModel(private val context: Context) : ViewModel() {
         viewModelScope.launch {
             record = recordDataStore.getRecord.first() // Obtener record inicial
         }
+    }
+
+    fun sonar(
+        context: Context,
+        exoPlayer: ExoPlayer,
+        sonido: Int,
+    ) {
+        val uri = Uri.parse("android.resource://" + context.packageName + "/" + sonido)
+        val mediaItem = MediaItem.fromUri(uri)
+        exoPlayer.setMediaItem(mediaItem)
+        exoPlayer.prepare()
+        exoPlayer.play()
     }
 
     fun calcularRecord() {
