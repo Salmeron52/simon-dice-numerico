@@ -1,7 +1,6 @@
 package com.buenhijogames.serienumericaalfa001
 
 import android.content.Context
-import android.media.MediaPlayer
 import android.net.Uri
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -52,6 +51,7 @@ class NumeroViewModel(private val context: Context) : ViewModel() {
             }
         }
     }
+
     fun numeroAleatorio(): Int {
         return (0..3).random() // 0, 1, 2, 3
     }

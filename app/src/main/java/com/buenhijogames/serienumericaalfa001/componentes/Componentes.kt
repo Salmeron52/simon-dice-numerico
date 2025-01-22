@@ -1,8 +1,6 @@
 package com.buenhijogames.serienumericaalfa001.componentes
 
 import android.content.Context
-import android.media.MediaPlayer
-import android.net.Uri
 import android.os.VibrationEffect
 import android.os.Vibrator
 import android.util.Log
@@ -34,7 +32,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.media3.common.MediaItem
 import androidx.media3.exoplayer.ExoPlayer
 import com.buenhijogames.serienumericaalfa001.NumeroViewModel
 import com.buenhijogames.serienumericaalfa001.R
@@ -65,13 +62,21 @@ fun BotonUsuario(viewModel: NumeroViewModel, numero: Int, color: Color, context:
         onUpdated = { viewModel.listaNumeros = it },
         onClicked = {
             when (numero) {
-                0 -> { viewModel.sonar(context, exoPlayer, R.raw.sonidoamarillo) }
+                0 -> {
+                    viewModel.sonar(context, exoPlayer, R.raw.sonidoamarillo)
+                }
 
-                1 -> { viewModel.sonar(context, exoPlayer, R.raw.sonidoverde) }
+                1 -> {
+                    viewModel.sonar(context, exoPlayer, R.raw.sonidoverde)
+                }
 
-                2 -> {viewModel.sonar(context, exoPlayer, R.raw.sonidorojo) }
+                2 -> {
+                    viewModel.sonar(context, exoPlayer, R.raw.sonidorojo)
+                }
 
-                3 -> {viewModel.sonar(context, exoPlayer, R.raw.sonidoazul) }
+                3 -> {
+                    viewModel.sonar(context, exoPlayer, R.raw.sonidoazul)
+                }
             }
 
             vibrator.vibrate(
@@ -119,7 +124,7 @@ fun Boton(
             .background(color)
             .clickable { onUpdated(listaDeEnteros + numero); onClicked(listaNumeros) },
         contentAlignment = Alignment.Center
-    ) {  }
+    ) { }
 }
 
 fun secuenciaIncorrecta(
@@ -195,7 +200,9 @@ fun MostrarError() {
 @Composable
 fun NumberScroller(numbers: List<Int>, viewModel: NumeroViewModel, context: Context) {
     val currentIndex = remember { mutableIntStateOf(-1) } // -1 para que no se muestre nada
-    var showNumber by remember { mutableStateOf(false) }
+    var mostrarColor by remember { mutableStateOf(false) }
+    var tiempoExposicion = 300L
+    var pausaEntreExposiciones = 300L
 
     val context = LocalContext.current
     // Creamos un ExoPlayer y lo liberamos cuando el Composable se destruye
@@ -210,11 +217,11 @@ fun NumberScroller(numbers: List<Int>, viewModel: NumeroViewModel, context: Cont
     LaunchedEffect(key1 = Unit) {
         var cont = 0
         while (cont < numbers.size) {
-            delay(300)
+            delay(pausaEntreExposiciones)
             currentIndex.intValue = (currentIndex.intValue + 1) % numbers.size
-            showNumber = true
-            delay(600)
-            showNumber = false
+            mostrarColor = true
+            delay(tiempoExposicion)
+            mostrarColor = false
             cont++
         }
     }
@@ -227,7 +234,7 @@ fun NumberScroller(numbers: List<Int>, viewModel: NumeroViewModel, context: Cont
             .background(Color.Black),
         contentAlignment = Alignment.Center
     ) {
-        if (currentIndex.intValue >= -2 && showNumber) {
+        if (currentIndex.intValue >= -2 && mostrarColor) {
             if (numbers[currentIndex.intValue] == 0) {
                 Caja(viewModel = viewModel, color = Color.Yellow)
                 viewModel.sonar(context, exoPlayer, R.raw.sonidoamarillo)
