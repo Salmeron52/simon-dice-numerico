@@ -17,6 +17,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableIntState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -201,8 +202,8 @@ fun MostrarError() {
 fun NumberScroller(numbers: List<Int>, viewModel: NumeroViewModel, context: Context) {
     val currentIndex = remember { mutableIntStateOf(-1) } // -1 para que no se muestre nada
     var mostrarColor by remember { mutableStateOf(false) }
-    var tiempoExposicion = 300L
-    var pausaEntreExposiciones = 300L
+    var tiempoExposicion = 500L
+    var pausaEntreExposiciones = 500L
 
     val context = LocalContext.current
     // Creamos un ExoPlayer y lo liberamos cuando el Composable se destruye
@@ -217,6 +218,10 @@ fun NumberScroller(numbers: List<Int>, viewModel: NumeroViewModel, context: Cont
     LaunchedEffect(key1 = Unit) {
         var cont = 0
         while (cont < numbers.size) {
+            val salidaColores =
+                viewModel.funcionSalidaColores(numbers, pausaEntreExposiciones, tiempoExposicion)
+            pausaEntreExposiciones = salidaColores.first
+            tiempoExposicion = salidaColores.second
             delay(pausaEntreExposiciones)
             currentIndex.intValue = (currentIndex.intValue + 1) % numbers.size
             mostrarColor = true
@@ -234,23 +239,36 @@ fun NumberScroller(numbers: List<Int>, viewModel: NumeroViewModel, context: Cont
             .background(Color.Black),
         contentAlignment = Alignment.Center
     ) {
-        if (currentIndex.intValue >= -2 && mostrarColor) {
-            if (numbers[currentIndex.intValue] == 0) {
-                Caja(viewModel = viewModel, color = Color.Yellow)
-                viewModel.sonar(context, exoPlayer, R.raw.sonidoamarillo)
-            } else if (numbers[currentIndex.intValue] == 1) {
-                Caja(viewModel = viewModel, color = Color.Green)
-                viewModel.sonar(context, exoPlayer, R.raw.sonidoverde)
-            } else if (numbers[currentIndex.intValue] == 2) {
-                Caja(viewModel = viewModel, color = Color.Red)
-                viewModel.sonar(context, exoPlayer, R.raw.sonidorojo)
-            } else if (numbers[currentIndex.intValue] == 3) {
-                Caja(viewModel = viewModel, color = Color.Blue)
-                viewModel.sonar(context, exoPlayer, R.raw.sonidoazul)
-            }
+        MostrarSonidosYColores(currentIndex, mostrarColor, numbers, viewModel, context, exoPlayer)
+    }
+}
+
+@Composable
+private fun MostrarSonidosYColores(
+    currentIndex: MutableIntState,
+    mostrarColor: Boolean,
+    numbers: List<Int>,
+    viewModel: NumeroViewModel,
+    context: Context,
+    exoPlayer: ExoPlayer,
+) {
+    if (currentIndex.intValue >= -2 && mostrarColor) {
+        if (numbers[currentIndex.intValue] == 0) {
+            Caja(viewModel = viewModel, color = Color.Yellow)
+            viewModel.sonar(context, exoPlayer, R.raw.sonidoamarillo)
+        } else if (numbers[currentIndex.intValue] == 1) {
+            Caja(viewModel = viewModel, color = Color.Green)
+            viewModel.sonar(context, exoPlayer, R.raw.sonidoverde)
+        } else if (numbers[currentIndex.intValue] == 2) {
+            Caja(viewModel = viewModel, color = Color.Red)
+            viewModel.sonar(context, exoPlayer, R.raw.sonidorojo)
+        } else if (numbers[currentIndex.intValue] == 3) {
+            Caja(viewModel = viewModel, color = Color.Blue)
+            viewModel.sonar(context, exoPlayer, R.raw.sonidoazul)
         }
     }
 }
+
 
 @Composable
 fun MostrarMarcador(viewModel: NumeroViewModel) {
