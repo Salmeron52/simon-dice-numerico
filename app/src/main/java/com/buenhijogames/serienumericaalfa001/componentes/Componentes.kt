@@ -189,12 +189,12 @@ fun MostrarErrorParpadeante(viewModel: NumeroViewModel, modifier: Modifier = Mod
             showError = !showError
         }
     }
-    if (showError) MostrarError() else Text("Hola", fontSize = 60.sp)
+    if (showError) MostrarError() else Text("Hola", fontSize = 55.sp)
 }
 
 @Composable
 fun MostrarError() {
-    Text("¡Error!", color = Color.Red, fontSize = 60.sp)
+    Text("Game Over", color = Color.Red, fontSize = 55.sp)
 }
 
 
@@ -218,7 +218,7 @@ fun NumberScroller(numbers: List<Int>, viewModel: NumeroViewModel, context: Cont
     LaunchedEffect(key1 = Unit) {
         var cont = 0
         while (cont < numbers.size) {
-            val salidaColores =
+            val salidaColores: Pair<Long, Long> =
                 viewModel.funcionSalidaColores(numbers, pausaEntreExposiciones, tiempoExposicion)
             pausaEntreExposiciones = salidaColores.first
             tiempoExposicion = salidaColores.second

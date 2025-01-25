@@ -2,7 +2,6 @@ package com.buenhijogames.serienumericaalfa001
 
 import android.content.Context
 import android.net.Uri
-import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -74,28 +73,16 @@ class NumeroViewModel(private val context: Context) : ViewModel() {
         var tiempoExposicion1 = tiempoExposicion
         if (numbers.size in 3..5) {
             pausaEntreExposiciones1 = 400L
-            tiempoExposicion1 = 400L
-            Log.e("numbers.size", numbers.size.toString())
-            Log.e("Pausa entre exposiciones", pausaEntreExposiciones1.toString())
-            Log.e("Tiempo de exposición", tiempoExposicion1.toString())
+            tiempoExposicion1 = 200
         } else if (numbers.size in 6..8) {
             pausaEntreExposiciones1 = 300L
             tiempoExposicion1 = 300L
-            Log.e("numbers.size", numbers.size.toString())
-            Log.e("Pausa entre exposiciones", pausaEntreExposiciones1.toString())
-            Log.e("Tiempo de exposición", tiempoExposicion1.toString())
         } else if (numbers.size in 9..11) {
             pausaEntreExposiciones1 = 250L
             tiempoExposicion1 = 300L
-            Log.e("numbers.size", numbers.size.toString())
-            Log.e("Pausa entre exposiciones", pausaEntreExposiciones1.toString())
-            Log.e("Tiempo de exposición", tiempoExposicion1.toString())
-        } else if (numbers.size > 12) {
+        } else if (numbers.size > 11) {
             pausaEntreExposiciones1 = 150L
             tiempoExposicion1 = 200L
-            Log.e("numbers.size", numbers.size.toString())
-            Log.e("Pausa entre exposiciones", pausaEntreExposiciones1.toString())
-            Log.e("Tiempo de exposición", tiempoExposicion1.toString())
         }
         return Pair(pausaEntreExposiciones1, tiempoExposicion1)
     }

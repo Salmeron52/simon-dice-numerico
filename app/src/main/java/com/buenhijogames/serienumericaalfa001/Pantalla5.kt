@@ -1,15 +1,16 @@
 package com.buenhijogames.serienumericaalfa001
 
 import android.content.Context
-import android.media.MediaPlayer
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -18,6 +19,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.media3.exoplayer.ExoPlayer
@@ -25,6 +27,7 @@ import com.buenhijogames.serienumericaalfa001.componentes.BotonUsuario
 import com.buenhijogames.serienumericaalfa001.componentes.ControlCaja
 import com.buenhijogames.serienumericaalfa001.componentes.MostrarErrorParpadeante
 import com.buenhijogames.serienumericaalfa001.componentes.MostrarMarcador
+import com.buenhijogames.serienumericaalfa001.publicidad.PrimonBanner
 
 @Composable
 fun Pantalla5(modifier: Modifier = Modifier, viewModel: NumeroViewModel, context: Context) {
@@ -43,10 +46,25 @@ fun Pantalla5(modifier: Modifier = Modifier, viewModel: NumeroViewModel, context
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         if (viewModel.jugar) {
+            Text(
+                text = "Primon",
+                color = Color.White,
+                fontSize = 36.sp,
+                fontStyle = FontStyle.Italic,
+                modifier = Modifier.padding(bottom = 24.dp)
+            )
             MostrarMarcador(viewModel)
             Spacer(modifier = Modifier.height(12.dp))
 
-            Text(text = "buenhijoGames", color = Color.White, fontSize = 24.sp)
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.Bottom
+            ) {
+                Text("by ", color = Color.White, fontSize = 12.sp)
+                Spacer(modifier = Modifier.width(4.dp))
+                Text(text = "buenhijoGames", color = Color.White, fontSize = 24.sp)
+            }
             Spacer(modifier = Modifier.height(64.dp))
 
             ControlCaja(viewModel.numbers, viewModel)
@@ -58,7 +76,7 @@ fun Pantalla5(modifier: Modifier = Modifier, viewModel: NumeroViewModel, context
             }
             Spacer(modifier = Modifier.height(12.dp))
             Row {
-                BotonUsuario(viewModel, 2, Color.Red,  context = LocalContext.current)
+                BotonUsuario(viewModel, 2, Color.Red, context = LocalContext.current)
                 BotonUsuario(viewModel, 3, Color.Blue, context = LocalContext.current)
             }
 
@@ -79,9 +97,13 @@ fun Pantalla5(modifier: Modifier = Modifier, viewModel: NumeroViewModel, context
                         viewModel.jugar = true
                     },
                     modifier = Modifier.padding(bottom = 32.dp)
-                ) { Text("Jugar otra vez", color = Color.Yellow, fontSize = 24.sp) }
+                ) { Text("New Game", color = Color.Yellow, fontSize = 24.sp) }
             }
         }
+        PrimonBanner(
+            modifier = Modifier.fillMaxSize(),
+            adId = "ca-app-pub-3940256099942544/9214589741"
+        )
     }
 
 }
