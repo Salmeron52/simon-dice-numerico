@@ -73,7 +73,7 @@ class NumeroViewModel(private val context: Context) : ViewModel() {
         var tiempoExposicion1 = tiempoExposicion
         if (numbers.size in 3..5) {
             pausaEntreExposiciones1 = 400L
-            tiempoExposicion1 = 200
+            tiempoExposicion1 = 300L
         } else if (numbers.size in 6..8) {
             pausaEntreExposiciones1 = 300L
             tiempoExposicion1 = 300L
