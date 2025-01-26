@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.viewinterop.AndroidView
-import androidx.privacysandbox.ads.adservices.adid.AdId
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdSize
 import com.google.android.gms.ads.AdView
@@ -13,7 +12,7 @@ import com.google.android.gms.ads.AdView
 fun PrimonBanner(modifier: Modifier = Modifier, adId: String) {
     AndroidView(
         modifier = Modifier.fillMaxSize(),
-        factory = {context ->
+        factory = { context ->
             AdView(context).apply {
                 setAdSize(AdSize.BANNER)
                 adUnitId = adId
