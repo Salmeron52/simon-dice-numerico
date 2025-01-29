@@ -121,9 +121,14 @@ fun Boton(
     onUpdated: (List<Int>) -> Unit,
     onClicked: (List<Int>) -> Unit,
 ) {
+    val configuration = LocalConfiguration.current
+    val screenWidthDp = configuration.screenWidthDp
+    val screenHeightDp = configuration.screenHeightDp
     Box(
         modifier = Modifier
             .clip(RoundedCornerShape(24.dp))
+            .height(screenHeightDp.dp * .2f)
+            .width(screenWidthDp.dp * .40f)
             .padding(horizontal = 4.dp)
             .size(160.dp)
             .background(color)
@@ -148,7 +153,7 @@ fun secuenciaIncorrecta(
 }
 
 @Composable
-fun Caja(viewModel: NumeroViewModel, color: Color) {
+fun Caja(modifier: Modifier = Modifier, viewModel: NumeroViewModel, color: Color) {
     val configuration = LocalConfiguration.current
     val screenWidthDp = configuration.screenWidthDp
     val screenHeightDp = configuration.screenHeightDp
@@ -156,7 +161,7 @@ fun Caja(viewModel: NumeroViewModel, color: Color) {
         modifier = Modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(24.dp))
-            .height(screenHeightDp.dp * .2f )
+            .height(screenHeightDp.dp * .2f)
             .width(screenWidthDp.dp * .80f)
             .background(color),
     ) {}
@@ -171,16 +176,22 @@ fun ControlCaja(
         MostrarError()
     } else {
         if (numbers.size == 1) {
-            NumberScroller(numbers = numbers, viewModel = viewModel, context = LocalContext.current)
+            NumberScroller(
+                modifier = Modifier.fillMaxWidth(),
+                numbers = numbers,
+                viewModel = viewModel,
+                context = LocalContext.current
+            )
         } else {
             if (viewModel.shouldRecompose) {
                 NumberScroller(
+                    modifier = Modifier.fillMaxWidth(),
                     numbers = numbers,
                     viewModel = viewModel,
                     context = LocalContext.current
                 )
             } else {
-                Caja(viewModel = viewModel, color = Color.Black)
+                Caja(modifier = Modifier.fillMaxWidth(), viewModel = viewModel, color = Color.Black)
             }
         }
     }
@@ -207,7 +218,12 @@ fun MostrarError() {
 
 
 @Composable
-fun NumberScroller(numbers: List<Int>, viewModel: NumeroViewModel, context: Context) {
+fun NumberScroller(
+    modifier: Modifier = Modifier,
+    numbers: List<Int>,
+    viewModel: NumeroViewModel,
+    context: Context,
+) {
     val configuration = LocalConfiguration.current
     val screenWidthDp = configuration.screenWidthDp
     val screenHeightDp = configuration.screenHeightDp
@@ -246,7 +262,7 @@ fun NumberScroller(numbers: List<Int>, viewModel: NumeroViewModel, context: Cont
     Box(
         modifier = Modifier
             .clip(RoundedCornerShape(24.dp))
-            .height(screenHeightDp.dp * .2f )
+            .height(screenHeightDp.dp * .2f)
             .width(screenWidthDp.dp * .80f)
             .background(Color.Black),
         contentAlignment = Alignment.Center

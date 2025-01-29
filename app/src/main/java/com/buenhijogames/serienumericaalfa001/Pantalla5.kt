@@ -71,12 +71,18 @@ fun Pantalla5(modifier: Modifier = Modifier, viewModel: NumeroViewModel, context
             ControlCaja(viewModel.numbers, viewModel)
             Spacer(modifier = Modifier.height(24.dp))
 
-            Row {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center,
+            ) {
                 BotonUsuario(viewModel, 0, Amarillo, context = LocalContext.current)
                 BotonUsuario(viewModel, 1, Color.Green, context = LocalContext.current)
             }
             Spacer(modifier = Modifier.height(12.dp))
-            Row {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center,
+                ) {
                 BotonUsuario(viewModel, 2, Color.Red, context = LocalContext.current)
                 BotonUsuario(viewModel, 3, Color.Blue, context = LocalContext.current)
             }
