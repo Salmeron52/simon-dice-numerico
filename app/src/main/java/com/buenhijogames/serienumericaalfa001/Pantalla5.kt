@@ -28,6 +28,7 @@ import com.buenhijogames.serienumericaalfa001.componentes.ControlCaja
 import com.buenhijogames.serienumericaalfa001.componentes.MostrarErrorParpadeante
 import com.buenhijogames.serienumericaalfa001.componentes.MostrarMarcador
 import com.buenhijogames.serienumericaalfa001.publicidad.PrimonBanner
+import com.buenhijogames.serienumericaalfa001.ui.theme.Amarillo
 
 @Composable
 fun Pantalla5(modifier: Modifier = Modifier, viewModel: NumeroViewModel, context: Context) {
@@ -71,7 +72,7 @@ fun Pantalla5(modifier: Modifier = Modifier, viewModel: NumeroViewModel, context
             Spacer(modifier = Modifier.height(24.dp))
 
             Row {
-                BotonUsuario(viewModel, 0, Color.Yellow, context = LocalContext.current)
+                BotonUsuario(viewModel, 0, Amarillo, context = LocalContext.current)
                 BotonUsuario(viewModel, 1, Color.Green, context = LocalContext.current)
             }
             Spacer(modifier = Modifier.height(12.dp))
